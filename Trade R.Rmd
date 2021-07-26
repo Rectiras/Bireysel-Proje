@@ -1,0 +1,81 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(tidyquant)
+```
+
+```{r}
+
+time1_1 <- ISOdate(2020,7,8,hour=0)
+
+time1_2 <- Sys.time()
+
+time2_1 <- ISOdate(2020,7,8,hour=0)
+
+time2_2 <- Sys.time()
+
+ticker1 <- "BTC-USD"
+ticker2 <- "GC=F"
+
+url1 <- paste("https://query1.finance.yahoo.com/v7/finance/download/",
+
+ticker1,
+
+"?period1=",
+
+as.integer(time1_1),
+
+"&period2=",
+
+as.integer(time1_2),
+
+"&interval=1d&events=history",
+
+sep="")
+
+
+dataset1 <- read.csv(url1)
+colnames(dataset1) <- paste("ticker1", colnames(dataset1), sep = "_")
+colnames(dataset1)[1] <-"Date"
+dataset1[dataset1=="null"]<-NA
+dataset1<-dataset1[complete.cases(dataset1),]
+#Dataset 1 results:
+dataset1
+
+url2 <- paste("https://query1.finance.yahoo.com/v7/finance/download/",
+
+ticker2,
+
+"?period1=",
+
+as.integer(time2_1),
+
+"&period2=",
+
+as.integer(time2_2),
+
+"&interval=1d&events=history",
+
+sep="")
+
+
+
+dataset2 <- read.csv(url2)
+colnames(dataset2) <- paste("ticker2", colnames(dataset2), sep = "_")
+colnames(dataset2)[1] <-"Date" 
+dataset2[dataset2=="null"]<-NA
+dataset2<-dataset2[complete.cases(dataset2),]
+#Dataset 2 results:
+dataset2
+```
+
+```{r}
+merged_data <- merge(dataset1, dataset2, by = "Date")
+
+merged_data
+```
+
